@@ -2,10 +2,13 @@
 require 'rubygems'
 require 'htmlentities'
 
+PRE_SECTION = /(<pre>.*<\/pre>)/mi
 def html2text(html)
-  text = html.
-    gsub(/(&nbsp;|\n|\s)+/im, ' ').squeeze(' ').strip.
-    gsub(/<([^\s]+)[^>]*(src|href)=\s*(.?)([^>\s]*)\3[^>]*>\4<\/\1>/i, '\4')
+  text = html.gsub(/&nbsp;/im, ' ').split(PRE_SECTION).inject('') do |t,n|
+    n =~ PRE_SECTION ?
+      t + n :
+      t + n.gsub(/(\n|\s)+/im, ' ').squeeze(' ').strip
+  end.gsub(/<([^\s]+)[^>]*(src|href)=\s*(.?)([^>\s]*)\3[^>]*>\4<\/\1>/i, '\4')
 
   links = []
   linkregex = /<[^>]*(src|href)=\s*(.?)([^>\s]*)\2[^>]*>\s*/i
@@ -30,7 +33,7 @@ def html2text(html)
       gsub(/<(br)(\/?| [^>]*)>/i, "\n").
       gsub(/<(\/h[\d]+|p)(| [^>]*)>/i, "\n\n").
       gsub(/<[^>]*>/, '')
-  ).lstrip.gsub(/\n[ ]+/, "\n") + "\n"
+  ) + "\n"
 
   for i in (0...links.size).to_a
     text = text + "\n  [#{i+1}] <#{decoder.decode(links[i])}>" unless links[i].nil?
