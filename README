@@ -1,0 +1,20 @@
+html2text.rb	Ruby conversion from HTML to TEXT
+
+Chip Camden	May, 2011
+
+I required this function for my Feed-to-Email utility, feedmbox
+(http://bitbucket.org/sterlingcamden/feedmbox).  The Unix utility
+html2text didn't provide everything I need.  It destroys all
+embedded links, and I wanted those footnoted to their URLs.
+
+This version is based on a function published by Choon Keat here:
+http://blog.choonkeat.com/weblog/2005/10/html2text-funct.html
+Chew's version needed a few adjustments, the most recent of which
+is to honor <pre> tags.
+
+You can run this as a command line script, and it will translate
+stdin or file arguments to standard out.  Or you can require the
+file in your project and call the "html2text" function, passing
+it the HTML and it will return the text.
+
+END
